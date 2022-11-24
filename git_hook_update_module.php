@@ -18,6 +18,26 @@ function rrmdir($dir)
   }
 }
 
+function getDeletePath()
+{
+  return (isWordpress() ? "../wp-content/plugins/" . MODULE : isPrestashop()) ? "../modules/" . MODULE : false;
+}
+
+function getExtractPath()
+{
+  return (isWordpress() ? "../wp-content/plugins/" : isPrestashop()) ? "../modules/" : false;
+}
+
+function isWordpress()
+{
+  return file_exists("../wp-content/") && file_exists("../wp-config.php");
+}
+
+function isPrestashop()
+{
+  return file_exists("../modules/") && file_exists("../config/defines.inc.php") && file_exists("../src/PrestaShopBundle/");
+}
+
 define("TOKEN", "");
 define("USERNAME", "");
 define("REPO", "");
@@ -47,12 +67,19 @@ $asset_id = $assets[0]["id"];
 $zip = $client->api('repo')->releases()->assets()->show(USERNAME, REPO, $asset_id, true);
 
 file_put_contents(FILENAME, $zip);
-rrmdir("../wp-content/plugins/" . MODULE);
+
+$delete_path = getDeletePath();
+$extract_path = getExtractPath();
+
+if ($delete_path === false || $extract_path === false) die("Unrecognized CMS. Supported: Prestashop and Wordpress");
+
+rrmdir($delete_path);
 $zip = new ZipArchive;
 $res = $zip->open(FILENAME);
-$zip->extractTo("../wp-content/plugins/");
+$zip->extractTo($extract_path);
 $zip->close();
 unlink(FILENAME);
+
 
 $time = date("Y-m-d H:i:s");
 
