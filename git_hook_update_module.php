@@ -62,7 +62,7 @@ if ($action !== "released") die;
 sleep(2);
 
 $security_token = $_GET["security_token"] ?? NULL;
-if ($security_token !== "") die("not valid");
+if ($security_token !== $config->security_token) die("not valid");
 
 $client = new \Github\Client();
 $client->authenticate(TOKEN, null, Github\AuthMethod::ACCESS_TOKEN);
