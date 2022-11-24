@@ -38,11 +38,20 @@ function isPrestashop()
   return file_exists("../modules/") && file_exists("../config/defines.inc.php") && file_exists("../src/PrestaShopBundle/");
 }
 
-define("TOKEN", "");
-define("USERNAME", "");
-define("REPO", "");
-define("FILENAME", "");
-define("MODULE", "");
+$config = file_get_contents("autodeploy.config.json");
+
+if (!$config) {
+  file_put_contents("error.log", "File di configurazione mancante. Crea il file autodeploy.config.json \n\n", FILE_APPEND);
+  die;
+}
+
+$config = json_decode($config);
+
+define("TOKEN", $config->token);
+define("USERNAME", $config->username);
+define("REPO", $config->repo);
+define("FILENAME", $config->filename);
+define("MODULE", $config->module);
 
 $payload = $_POST["payload"] ?? NULL;
 if ($payload === NULL) die;
@@ -71,7 +80,10 @@ file_put_contents(FILENAME, $zip);
 $delete_path = getDeletePath();
 $extract_path = getExtractPath();
 
-if ($delete_path === false || $extract_path === false) die("Unrecognized CMS. Supported: Prestashop and Wordpress");
+if ($delete_path === false || $extract_path === false) {
+  file_put_contents("error.log", "Unrecognized CMS. Supported: Prestashop and Wordpress \n\n", FILE_APPEND);
+  die;
+}
 
 rrmdir($delete_path);
 $zip = new ZipArchive;
