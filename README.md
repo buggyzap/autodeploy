@@ -1,5 +1,7 @@
 # Autodeploy
 
+![Autodeploy cover](autodeploy.jpg)
+
 Automate Modules development and deploy testing process to N instances with an extremely fast and easy configuration.
 
 ## Supported CMS environment
