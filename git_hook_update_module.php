@@ -95,6 +95,6 @@ unlink(FILENAME);
 
 $time = date("Y-m-d H:i:s");
 
-file_put_contents("call.log", "Chiamata ricevuta alle $time e cartella aggiornata \n\n", FILE_APPEND);
+file_put_contents("autodeploy.log", "Received and updated at $time \n\n", FILE_APPEND);
 
 echo "done $time";
