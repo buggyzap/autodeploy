@@ -11,7 +11,7 @@ Currently **autodeploy** supports Wordpress and Prestashop environments.
 Go on your server's CMS root folder and type
 
 ```
-npx degit buggyzap/autodeploy
+npx degit buggyzap/autodeploy autodeploy
 cd autodeploy
 composer install
 ```
